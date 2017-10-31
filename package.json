@@ -1,0 +1,25 @@
+{
+  "name": "morty",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/art-eltyshev/morty.git"
+  },
+  "author": "art-eltyshev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/art-eltyshev/morty/issues"
+  },
+  "homepage": "https://github.com/art-eltyshev/morty#readme",
+  "dependencies": {
+    "aws-sdk": "^2.141.0",
+    "eslint": "^4.10.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0"
+  }
+}
