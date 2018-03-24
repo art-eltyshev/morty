@@ -8,7 +8,7 @@ function handler(telegraf) {
         const matched = ctx.message.text.match(/\/spend (\d+)(.*)/i);
 
         if (!matched) {
-            ctx.reply(helpText);
+            return ctx.reply(helpText);
         }
 
         const params = matched.slice(1).map(p => p.trim()).filter(Boolean);
@@ -31,9 +31,13 @@ function handler(telegraf) {
             comment,
             debtor,
             who: users.getName(ctx.message.from.username),
-        }).then(() =>
-            ctx.reply('добавил!', {reply_to_message_id: ctx.message.message_id})
-        )
+        }).then(() => {
+            return ctx.reply('добавил!', {reply_to_message_id: ctx.message.message_id});
+        }).catch(e => {
+            if (e.code === 'out_of_rows') {
+                return ctx.reply('таблица переполнена!', {reply_to_message_id: ctx.message.message_id});
+            }
+        });
     });
 }
 

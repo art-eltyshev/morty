@@ -84,8 +84,12 @@ function getDebts() {
 
 function addTransaction({ who, amount, comment, debtor }) {
     return getTransactions().then(({data: transactions, auth}) => {
-        // if (transactions.length === TRANSACTIONS_MAX_COUNT) {
-        // }
+        if (transactions.length === TRANSACTIONS_MAX_COUNT) {
+            const error = new Error('Out of rows');
+            error.code = 'out_of_rows';
+
+            return Promise.reject(error);
+        }
 
         const row = TRANSACTIONS_FIRST_ROW + transactions.length;
 
