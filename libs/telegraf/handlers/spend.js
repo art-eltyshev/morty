@@ -1,4 +1,7 @@
-const helpText = '/spend <сумма> <кто> <комментарий>';
+const db = require('../../db');
+const users = require('../../db/users');
+
+const helpText = '/spend сумма @за_кого за_что';
 
 function handler(telegraf) {
     telegraf.command('spend', (ctx) => {
@@ -8,9 +11,29 @@ function handler(telegraf) {
             ctx.reply(helpText);
         }
 
-        const params = matched.slice(1).map(p => p.trim());
+        const params = matched.slice(1).map(p => p.trim()).filter(Boolean);
 
-        return ctx.reply(`spend: params=${params}`);
+        const amount = params[0];
+        let debtor;
+        let comment;
+
+        if (params[1]) {
+            if (params[1][0] === '@') {
+                debtor = users.getName(params[1].split(' ', 1)[0].slice(1)) || '';
+                comment = params[1].substring(debtor.length + 1);
+            } else {
+                comment = params[1];
+            }
+        }
+
+        return db.addTransaction({
+            amount,
+            comment,
+            debtor,
+            who: users.getName(ctx.message.from.username),
+        }).then(() =>
+            ctx.reply('добавил!', {reply_to_message_id: ctx.message.message_id})
+        )
     });
 }
 
